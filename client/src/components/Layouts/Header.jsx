@@ -1,38 +1,43 @@
-import React from 'react'
-import {NavLink } from "react-router-dom"
+import React from "react";
+import { NavLink } from "react-router-dom";
 import { FcShop } from "react-icons/fc";
 
 // import * as React from 'react';
-import AppBar from '@mui/material/AppBar';
-import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
-import IconButton from '@mui/material/IconButton';
-import Typography from '@mui/material/Typography';
-import Menu from '@mui/material/Menu';
-import MenuIcon from '@mui/icons-material/Menu';
-import Container from '@mui/material/Container';
-import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
-import Tooltip from '@mui/material/Tooltip';
-import MenuItem from '@mui/material/MenuItem';
-import AdbIcon from '@mui/icons-material/Adb';
-
-
+import AppBar from "@mui/material/AppBar";
+import Box from "@mui/material/Box";
+import Toolbar from "@mui/material/Toolbar";
+import IconButton from "@mui/material/IconButton";
+import Typography from "@mui/material/Typography";
+import Menu from "@mui/material/Menu";
+import MenuIcon from "@mui/icons-material/Menu";
+import Container from "@mui/material/Container";
+import Avatar from "@mui/material/Avatar";
+import Button from "@mui/material/Button";
+import Tooltip from "@mui/material/Tooltip";
+import MenuItem from "@mui/material/MenuItem";
+import AdbIcon from "@mui/icons-material/Adb";
+import { useAuth } from "../../context/Auth";
+import { toast } from "react-toastify";
 
 // const pages = ['Products', 'Pricing', 'Blog'];
-const pages =[
-    {label : 'Home', path:'/'},
-    {label : 'Categories', path:'/categories'},
-    {label : 'Register', path:'/register'},
-    {label : 'Login', path:'/login'},
-    {label : 'Cart', path:'/cart'},
+const publicPages = [
+  { label: "Home", path: "/" },
+  { label: "Categories", path: "/categories" },
 
-]
-const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
+  { label: "Cart", path: "/cart" },
+];
+
+const authPages = [
+    { label: "Register", path: "/register" },
+  { label: "Login", path: "/login" },
+];
+
+const settings = ["Profile", "Account", "Dashboard", "Logout"];
 
 const Header = () => {
+  const [auth, setAuth] = useAuth();
 
-      const [anchorElNav, setAnchorElNav] = React.useState(null);
+  const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
 
   const handleOpenNavMenu = (event) => {
@@ -56,25 +61,25 @@ const Header = () => {
         <Toolbar disableGutters>
           {/* <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} /> */}
           <Typography
-          component={NavLink}
-          to={'/'}
+            component={NavLink}
+            to={"/"}
             variant="h6"
             noWrap
             sx={{
               mr: 2,
-              display: { xs: 'none', md: 'flex' },
-              fontFamily: 'monospace',
+              display: { xs: "none", md: "flex" },
+              fontFamily: "monospace",
               fontWeight: 700,
-              letterSpacing: '.3rem',
-              color: 'inherit',
-              textDecoration: 'none',
+              letterSpacing: ".3rem",
+              color: "inherit",
+              textDecoration: "none",
             }}
           >
- <FcShop style={{ marginRight: '8px', fontSize: '28px' }} />
-             Cartifya
+            <FcShop style={{ marginRight: "8px", fontSize: "28px" }} />
+            Cartifya
           </Typography>
 
-          <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
+          <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
             <IconButton
               size="large"
               aria-label="account of current user"
@@ -89,33 +94,48 @@ const Header = () => {
               id="menu-appbar"
               anchorEl={anchorElNav}
               anchorOrigin={{
-                vertical: 'bottom',
-                horizontal: 'left',
+                vertical: "bottom",
+                horizontal: "left",
               }}
               keepMounted
               transformOrigin={{
-                vertical: 'top',
-                horizontal: 'left',
+                vertical: "top",
+                horizontal: "left",
               }}
               open={Boolean(anchorElNav)}
               onClose={handleCloseNavMenu}
-              sx={{ display: { xs: 'block', md: 'none' } }}
+              sx={{ display: { xs: "block", md: "none" } }}
             >
-
-              {pages.map((page) => (
-                <MenuItem 
-                key={page.label}
-                component={NavLink} 
-                to={page.path}
-                onClick={handleCloseNavMenu}>
-                  <Typography sx={{ textAlign: 'center' }}>
+              {publicPages.map((page) => (
+                <MenuItem
+                  key={page.label}
+                  component={NavLink}
+                  to={page.path}
+                  onClick={handleCloseNavMenu}
+                >
+                  <Typography sx={{ textAlign: "center" }}>
                     {page.label}
-                    </Typography>
+                  </Typography>
                 </MenuItem>
               ))}
+
+              {!auth?.user &&
+              authPages.map((page) =>(
+
+                <MenuItem
+                key={page.label}
+                component={NavLink}
+                to={page.path}
+                onClick={handleCloseNavMenu}
+                >
+                {page.label}
+                </MenuItem>
+               ) )
+              }
             </Menu>
           </Box>
-          <AdbIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
+          {/* <AdbIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
+           */}
           <Typography
             variant="h5"
             noWrap
@@ -123,63 +143,82 @@ const Header = () => {
             to={"/"}
             sx={{
               mr: 2,
-              display: { xs: 'flex', md: 'none' },
+              display: { xs: "flex", md: "none" },
               flexGrow: 1,
-              fontFamily: 'monospace',
+              fontFamily: "monospace",
               fontWeight: 700,
-              letterSpacing: '.3rem',
-              color: 'inherit',
-              textDecoration: 'none',
+              letterSpacing: ".3rem",
+              color: "inherit",
+              textDecoration: "none",
             }}
           >
+            <FcShop style={{ marginRight: "8px", fontSize: "28px" }} />
             Cartifya
           </Typography>
-          <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-            {pages.map((page) => (
+          <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
+            {publicPages.map((page) => (
               <Button
-                              key={page.label}
-
-              component={NavLink}
-              to={page.path}
+                key={page.label}
+                component={NavLink}
+                to={page.path}
                 onClick={handleCloseNavMenu}
-                sx={{ my: 2, color: 'white', display: 'block' }}
+                sx={{ my: 2, color: "white", display: "block" }}
               >
                 {page.label}
               </Button>
             ))}
-          </Box>
-          <Box sx={{ flexGrow: 0 }}>
-            <Tooltip title="Open settings">
-              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
-              </IconButton>
-            </Tooltip>
-            <Menu
-              sx={{ mt: '45px' }}
-              id="menu-appbar"
-              anchorEl={anchorElUser}
-              anchorOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-              }}
-              open={Boolean(anchorElUser)}
-              onClose={handleCloseUserMenu}
+           {!auth?.user &&
+           authPages.map((page) =>(
+            <Button
+             key={page.label}
+                component={NavLink}
+                to={page.path}
+                onClick={handleCloseNavMenu}
+                sx={{ my: 2, color: "white", display: "block" }}
             >
-              {settings.map((setting) => (
-                <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                  <Typography sx={{ textAlign: 'center' }}>{setting}</Typography>
-                </MenuItem>
-              ))}
-            </Menu>
+              {page.label}
+            </Button>
+           ))
+
+           }
+
           </Box>
+        {auth?.user && (
+  <Box sx={{ flexGrow: 0 }}>
+    <Tooltip title={auth.user.name}>
+      <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+        <Avatar>
+          {auth.user.name.charAt(0).toUpperCase()}
+        </Avatar>
+      </IconButton>
+    </Tooltip>
+
+    <Menu
+      sx={{ mt: "45px" }}
+      anchorEl={anchorElUser}
+      open={Boolean(anchorElUser)}
+      onClose={handleCloseUserMenu}
+    >
+      <MenuItem component={NavLink} to="/dashboard">
+        Dashboard
+      </MenuItem>
+
+      <MenuItem
+        onClick={() => {
+          setAuth({ user: null, token: "" });
+          localStorage.removeItem("auth");
+          toast.success("Logout Successfully")
+        }}
+      >
+        Logout
+      </MenuItem>
+    </Menu>
+  </Box>
+)}
+
         </Toolbar>
       </Container>
     </AppBar>
   );
-}
+};
 export default Header;
