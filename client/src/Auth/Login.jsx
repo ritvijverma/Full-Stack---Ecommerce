@@ -1,17 +1,20 @@
-import React, { useState } from "react";
+import React from "react";
 import Layout from "../components/Layouts/Layout";
 import Card from "@mui/material/Card";
 import { CardContent, Typography, TextField, Button } from "@mui/material";
 import { useForm, Controller } from "react-hook-form";
 import { toast } from "react-toastify";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "../context/Auth";
 
 const Login = () => {
   const [auth, setAuth] = useAuth();
-
   const navigate = useNavigate();
+  const location = useLocation();
+
+  const from = location.state?.from || "/";
+
   const { control, handleSubmit, reset } = useForm({
     defaultValues: {
       email: "",
@@ -26,15 +29,20 @@ const Login = () => {
         data
       );
 
-      if (res && res.data.success) {
-        toast.success(res.data && res.data.message);
+      if (res?.data?.success) {
+        toast.success(res.data.message);
+
         setAuth({
-            ...auth,
-            user:res.data.user,     
-            token: res.data.token,
-        })
-        localStorage.setItem('auth',JSON.stringify(res.data))
-        navigate("/");
+          ...auth,
+          user: res.data.user,
+          token: res.data.token,
+        });
+
+        localStorage.setItem("auth", JSON.stringify(res.data));
+
+        // ✅ redirect AFTER login success
+        navigate(from, { replace: true });
+
         reset();
       } else {
         toast.error(res.data.message);
@@ -51,6 +59,7 @@ const Login = () => {
         <Typography variant="h5" gutterBottom>
           Login Form
         </Typography>
+
         <CardContent>
           <form onSubmit={handleSubmit(onSubmit)}>
             <Controller
@@ -61,14 +70,14 @@ const Login = () => {
                 <TextField
                   {...field}
                   label="Email"
-                  variant="outlined"
                   fullWidth
                   margin="normal"
                   error={!!error}
-                  helperText={error ? error.message : null}
+                  helperText={error?.message}
                 />
               )}
             />
+
             <Controller
               name="password"
               control={control}
@@ -76,12 +85,12 @@ const Login = () => {
               render={({ field, fieldState: { error } }) => (
                 <TextField
                   {...field}
+                  type="password"
                   label="Password"
-                  variant="outlined"
                   fullWidth
                   margin="normal"
                   error={!!error}
-                  helperText={error ? error.message : null}
+                  helperText={error?.message}
                 />
               )}
             />
@@ -89,13 +98,12 @@ const Login = () => {
             <Button
               type="submit"
               variant="contained"
-              color="primary"
               fullWidth
               sx={{ mt: 2 }}
             >
               Login
             </Button>
-          </form>{" "}
+          </form>
         </CardContent>
       </Card>
     </Layout>
