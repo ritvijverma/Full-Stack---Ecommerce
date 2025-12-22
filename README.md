@@ -80,7 +80,29 @@ The project is currently **under active development**, with a **secure authentic
 | GET  | `/api/v1/auth/test` | Test protected route |
 
 
-## 👤 Author
+### 💡 Fun Fact
+🚀 "nodemon is my therapist. It listens and restarts every time I break."
 
-**Ritvij Verma**
+### 👨‍💻 Developed by Ritvij Verma
+
+> GitHub: @ritvijverma
+
+> LinkedIn: linkedin.com/in/ritvij-verma
+
+> Instagram: @ritvij.verma
+
+---
+
+### 🙌 Final Words
+
+Thank you for checking out this project!  
+This is just a small step in my journey of mastering full stack development.  
+If you're a beginner like me, feel free to fork this repo, try the API yourself, and build something awesome!
+
+> ⭐ Star the repo if you found it helpful  
+> 🛠️ Suggest improvements or open a PR  
+> 📬 Let's connect and grow together 💻
+
+Happy Coding! 💙  
+— Ritvij
 
