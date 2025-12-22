@@ -5,43 +5,31 @@ import { CardContent, Typography, TextField, Button } from "@mui/material";
 import { useForm, Controller } from "react-hook-form";
 import { toast } from "react-toastify";
 import axios from "axios";
-import { useNavigate, useLocation, Navigate } from "react-router-dom";
-import { useAuth } from "../context/Auth";
+import { useNavigate, Navigate } from "react-router-dom";
 
-const Login = () => {
-  const [auth, setAuth] = useAuth();
+const ForgotPassword = () => {
   const navigate = useNavigate();
-  const location = useLocation();
 
-  const from = location.state?.from || "/";
 
   const { control, handleSubmit, reset } = useForm({
     defaultValues: {
       email: "",
-      password: "",
+      newPassword: "",
+      answer: "",
     },
   });
 
   const onSubmit = async (data) => {
     try {
       const res = await axios.post(
-        `${import.meta.env.VITE_BACKEND_URL}/api/v1/auth/login`,
+        `${import.meta.env.VITE_BACKEND_URL}/api/v1/auth/forgot-password`,
         data
       );
 
       if (res?.data?.success) {
         toast.success(res.data.message);
+        navigate('/login')
 
-        setAuth({
-          ...auth,
-          user: res.data.user,
-          token: res.data.token,
-        });
-
-        localStorage.setItem("auth", JSON.stringify(res.data));
-
-        // ✅ redirect AFTER login success
-        navigate(from, { replace: true });
 
         reset();
       } else {
@@ -54,10 +42,10 @@ const Login = () => {
   };
 
   return (
-    <Layout>
+    <Layout title="Forgot Password - Cartifya App">
       <Card sx={{ maxWidth: 400, mx: "auto", mt: 8, p: 2 }}>
         <Typography variant="h5" gutterBottom>
-          Login Form
+          RESET PASSWORD
         </Typography>
 
         <CardContent>
@@ -77,11 +65,26 @@ const Login = () => {
                 />
               )}
             />
+            <Controller
+              name="answer"
+              control={control}
+              rules={{ required: "Answer is Required" }}
+              render={({ field, fieldState: { error } }) => (
+                <TextField
+                  {...field}
+                  label="Answer "
+                  fullWidth
+                  margin="normal"
+                  error={!!error}
+                  helperText={error?.message}
+                />
+              )}
+            />
 
             <Controller
-              name="password"
+              name="newPassword"
               control={control}
-              rules={{ required: "Password is Required" }}
+              rules={{ required: "New Password is Required" }}
               render={({ field, fieldState: { error } }) => (
                 <TextField
                   {...field}
@@ -101,16 +104,7 @@ const Login = () => {
               fullWidth
               sx={{ mt: 2 }}
             >
-              Login
-            </Button>
-             <Button
-              type="button"
-              variant="outlined"
-              fullWidth
-              sx={{ mt: 2 }}
-              onClick={() =>navigate('/forgot-password')}
-            >
-              Forgot Password
+              Reset
             </Button>
           </form>
         </CardContent>
@@ -119,4 +113,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default ForgotPassword;

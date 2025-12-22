@@ -16,6 +16,7 @@ const Register = () => {
       password: "",
       phone: "",
       address: "",
+      answer:""
     },
   });
   const onSubmit = async (data) => {
@@ -118,6 +119,22 @@ const Register = () => {
                 <TextField
                   {...field}
                   label="Address"
+                  variant="outlined"
+                  fullWidth
+                  margin="normal"
+                  error={!!error}
+                  helperText={error ? error.message : null}
+                />
+              )}
+            />
+             <Controller
+              name="answer"
+              control={control}
+              rules={{ required: "Answer is Required" }}
+              render={({ field, fieldState: { error } }) => (
+                <TextField
+                  {...field}
+                  label="What is your Favourite Sports"
                   variant="outlined"
                   fullWidth
                   margin="normal"
