@@ -1,38 +1,41 @@
-import express from "express"
+import express from "express";
 import dotenv from "dotenv";
-
 import morgan from "morgan";
+import cors from "cors";
+import path from "path";
+import { fileURLToPath } from "url";
+
 import connectDB from "./config/db.js";
+import authRoutes from "./routes/authRoute.js";
 
-import authRoutes from "./routes/authRoute.js"
-
-import cors from "cors"
-
-//config env
+// config env
 dotenv.config();
 
-//config dev
+// db connect
 connectDB();
 
-//rest object
 const app = express();
 
-//middleware
-app.use(cors())
-app.use(express.json())
+// middleware
+app.use(cors());
+app.use(express.json());
 app.use(morgan("dev"));
 
-// routes
-app.use("/api/v1/auth",authRoutes)
+// ES module fix
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
+// API routes
+app.use("/api/v1/auth", authRoutes);
 
-app.get("/", (req, res) => {
-    res.send("Hello World!");
+// React build serve
+app.use(express.static(path.join(__dirname, "client/dist")));
+
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "client/dist/index.html"));
 });
-
 
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
-    console.log("Server is running on port " + PORT );
+  console.log(`Server running on port ${PORT}`);
 });
-
