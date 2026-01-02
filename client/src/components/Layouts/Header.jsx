@@ -18,6 +18,8 @@ import MenuItem from "@mui/material/MenuItem";
 import AdbIcon from "@mui/icons-material/Adb";
 import { useAuth } from "../../context/Auth";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
+
 
 // const pages = ['Products', 'Pricing', 'Blog'];
 const publicPages = [
@@ -28,7 +30,7 @@ const publicPages = [
 ];
 
 const authPages = [
-    { label: "Register", path: "/register" },
+  { label: "Register", path: "/register" },
   { label: "Login", path: "/login" },
 ];
 
@@ -36,6 +38,7 @@ const settings = ["Profile", "Account", "Dashboard", "Logout"];
 
 const Header = () => {
   const [auth, setAuth] = useAuth();
+  const navigate = useNavigate();
 
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
@@ -120,18 +123,16 @@ const Header = () => {
               ))}
 
               {!auth?.user &&
-              authPages.map((page) =>(
-
-                <MenuItem
-                key={page.label}
-                component={NavLink}
-                to={page.path}
-                onClick={handleCloseNavMenu}
-                >
-                {page.label}
-                </MenuItem>
-               ) )
-              }
+                authPages.map((page) => (
+                  <MenuItem
+                    key={page.label}
+                    component={NavLink}
+                    to={page.path}
+                    onClick={handleCloseNavMenu}
+                  >
+                    {page.label}
+                  </MenuItem>
+                ))}
             </Menu>
           </Box>
           {/* <AdbIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
@@ -167,55 +168,59 @@ const Header = () => {
                 {page.label}
               </Button>
             ))}
-           {!auth?.user &&
-           authPages.map((page) =>(
-            <Button
-             key={page.label}
-                component={NavLink}
-                to={page.path}
-                onClick={handleCloseNavMenu}
-                sx={{ my: 2, color: "white", display: "block" }}
-            >
-              {page.label}
-            </Button>
-           ))
-
-           }
-
+            {!auth?.user &&
+              authPages.map((page) => (
+                <Button
+                  key={page.label}
+                  component={NavLink}
+                  to={page.path}
+                  onClick={handleCloseNavMenu}
+                  sx={{ my: 2, color: "white", display: "block" }}
+                >
+                  {page.label}
+                </Button>
+              ))}
           </Box>
-        {auth?.user && (
-  <Box sx={{ flexGrow: 0 }}>
-    <Tooltip title={auth.user.name}>
-      <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-        <Avatar>
-          {auth.user.name.charAt(0).toUpperCase()}
-        </Avatar>
-      </IconButton>
-    </Tooltip>
+          {auth?.user && (
+            <Box sx={{ flexGrow: 0 }}>
+              <Tooltip title={auth.user.name}>
+                <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                  <Avatar>{auth.user.name.charAt(0).toUpperCase()}</Avatar>
+                </IconButton>
+              </Tooltip>
 
-    <Menu
-      sx={{ mt: "45px" }}
-      anchorEl={anchorElUser}
-      open={Boolean(anchorElUser)}
-      onClose={handleCloseUserMenu}
-    >
-      <MenuItem component={NavLink} to="/dashboard">
-        Dashboard
-      </MenuItem>
+              <Menu
+                sx={{ mt: "45px" }}
+                anchorEl={anchorElUser}
+                open={Boolean(anchorElUser)}
+                onClose={handleCloseUserMenu}
+              >
+                <MenuItem
+                  component={NavLink}
+                  to={
+                    auth?.user?.role === 1
+                      ? "/dashboard/admin"
+                      : "/dashboard/user"
+                  }
+                    onClick={handleCloseUserMenu}
 
-      <MenuItem
-        onClick={() => {
-          setAuth({ user: null, token: "" });
-          localStorage.removeItem("auth");
-          toast.success("Logout Successfully")
-        }}
-      >
-        Logout
-      </MenuItem>
-    </Menu>
-  </Box>
-)}
+                >
+                  Dashboard
+                </MenuItem>
 
+                <MenuItem
+                  onClick={() => {
+                    setAuth({ user: null, token: "" });
+                    localStorage.removeItem("auth");
+                    toast.success("Logout Successfully");
+                    navigate("/login")
+                  }}
+                >
+                  Logout
+                </MenuItem>
+              </Menu>
+            </Box>
+          )}
         </Toolbar>
       </Container>
     </AppBar>

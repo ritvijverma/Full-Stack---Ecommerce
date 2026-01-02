@@ -6,12 +6,14 @@ import PageNotFound from "./pages/PageNotFound";
 import About from "./pages/About";
 import Policy from "./pages/Policy";
 import Register from "./Auth/Register";
-import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import Login from "./Auth/Login";
+import ForgotPassword from "./Auth/ForgotPassword";
 import Dashboard from "./components/user/Dashboard";
 import PrivateRoute from "./components/Routes/Private";
-import ForgotPassword from "./Auth/ForgotPassword";
+import AdminRoute from "./components/Routes/AdminRoute";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import AdminDashboard from "./pages/Admin/AdminDashboard";
 
 const App = () => {
   return (
@@ -21,15 +23,26 @@ const App = () => {
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
-        <Route 
-               path="/dashboard" element={<PrivateRoute />}>
-        <Route path="" element={<Dashboard />} />
+
+        {/* Dashboard Routes */}
+        <Route path="/dashboard">
+          {/* User Dashboard */}
+          <Route element={<PrivateRoute />}>
+            <Route path="user" element={<Dashboard />} />
+          </Route>
+
+          {/* Admin Dashboard */}
+          <Route element={<AdminRoute />}>
+            <Route path="admin" element={<AdminDashboard />} />
+          </Route>
         </Route>
+
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/policy" element={<Policy />} />
         <Route path="*" element={<PageNotFound />} />
       </Routes>
+
       <ToastContainer />
     </>
   );
