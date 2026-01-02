@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useAuth } from "../../context/Auth";
-import { Outlet, Navigate } from "react-router-dom";
+import { Outlet, Navigate , useLocation} from "react-router-dom";
 import axios from "axios";
 import CircularProgress from "@mui/material/CircularProgress";
 import Box from "@mui/material/Box";
@@ -8,11 +8,16 @@ import Box from "@mui/material/Box";
 export default function PrivateRoute() {
   const [ok, setOk] = useState(null);
   const [auth] = useAuth(); // setAuth not needed
+  const location = useLocation()
 
   useEffect(() => {
     const authCheck = async () => {
       try {
-        const res = await axios.get("/api/v1/auth/user-auth");
+        const res = await axios.get("/api/v1/auth/user-auth",{
+          headers :{
+            Authorization: `Bearer ${auth?.token}`,
+          },
+        });
         if (res.data.ok) {
           setOk(true);
         } else {

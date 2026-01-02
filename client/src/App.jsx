@@ -9,11 +9,11 @@ import Register from "./Auth/Register";
 import Login from "./Auth/Login";
 import ForgotPassword from "./Auth/ForgotPassword";
 import Dashboard from "./components/user/Dashboard";
-import PrivateRoute from "./components/Routes/Private";
 import AdminRoute from "./components/Routes/AdminRoute";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import AdminDashboard from "./pages/Admin/AdminDashboard";
+import UserRoute from "./components/Routes/UserRoute";
 
 const App = () => {
   return (
@@ -27,7 +27,7 @@ const App = () => {
         {/* Dashboard Routes */}
         <Route path="/dashboard">
           {/* User Dashboard */}
-          <Route element={<PrivateRoute />}>
+          <Route element={<UserRoute />}>
             <Route path="user" element={<Dashboard />} />
           </Route>
 
